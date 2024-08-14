@@ -222,15 +222,15 @@ export const prepareMergeRequestForMerge = async (
 		return;
 	}
 
-	if (mergeRequest.detailed_merge_status === DetailedMergeStatus.Conflict) {
-		const message = 'The merge request has conflict';
-		await Promise.all([
-			assignToAuthorAndResetLabels(gitlabApi, mergeRequest, user),
-			sendNote(gitlabApi, mergeRequest, "Merge request can't be merged: MR has conflict"),
-		]);
+	// if (mergeRequest.detailed_merge_status === DetailedMergeStatus.Conflict) {
+	// 	const message = 'The merge request has conflict';
+	// 	await Promise.all([
+	// 		assignToAuthorAndResetLabels(gitlabApi, mergeRequest, user),
+	// 		sendNote(gitlabApi, mergeRequest, "Merge request can't be merged: MR has conflict"),
+	// 	]);
 
-		return;
-	}
+	// 	return;
+	// }
 
 	if (mergeRequest.detailed_merge_status === DetailedMergeStatus.NotApproved) {
 		const approvals = await gitlabApi.getMergeRequestApprovals(
