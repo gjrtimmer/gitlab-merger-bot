@@ -164,16 +164,16 @@ export const acceptMergeRequest = async (
 		return 'done';
 	}
 
-	if (mergeRequestInfo.detailed_merge_status === DetailedMergeStatus.Conflict) {
-		const message = 'The merge request has conflict';
-		console.log(`[MR][${mergeRequestInfo.iid}] merge failed: ${message}, assigning back`);
-		await Promise.all([
-			assignToAuthorAndResetLabels(gitlabApi, mergeRequestInfo, user),
-			sendNote(gitlabApi, mergeRequestInfo, message),
-		]);
+	// if (mergeRequestInfo.detailed_merge_status === DetailedMergeStatus.Conflict) {
+	// 	const message = 'The merge request has conflict';
+	// 	console.log(`[MR][${mergeRequestInfo.iid}] merge failed: ${message}, assigning back`);
+	// 	await Promise.all([
+	// 		assignToAuthorAndResetLabels(gitlabApi, mergeRequestInfo, user),
+	// 		sendNote(gitlabApi, mergeRequestInfo, message),
+	// 	]);
 
-		return 'done';
-	}
+	// 	return 'done';
+	// }
 
 	if (mergeRequestInfo.detailed_merge_status === DetailedMergeStatus.NotApproved) {
 		const approvals = await gitlabApi.getMergeRequestApprovals(
@@ -207,7 +207,8 @@ export const acceptMergeRequest = async (
 
 	if (
 		mergeRequestInfo.detailed_merge_status === DetailedMergeStatus.NeedsRebase ||
-		mergeRequestInfo.detailed_merge_status === DetailedMergeStatus.NeedRebase
+		mergeRequestInfo.detailed_merge_status === DetailedMergeStatus.NeedRebase ||
+		mergeRequestInfo.detailed_merge_status === DetailedMergeStatus.Conflict
 	) {
 		console.log(`[MR][${mergeRequestInfo.iid}] source branch is not up to date, rebasing`);
 		await tryCancelPipeline(gitlabApi, mergeRequestInfo, user);
